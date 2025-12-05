@@ -1,0 +1,138 @@
+🧩 What prototypal inheritance really is
+
+In JavaScript, every object has a hidden link called [[Prototype]] (or accessible via __proto__) to another object — its prototype.
+
+When you access a property on an object, JS walks up this chain:
+
+object → prototype → prototype → ... → Object.prototype
+
+So inheritance in JS isn’t about “copying” properties from parent to child — it’s about sharing behavior through delegation.
+
+⸻
+
+⚙️ Why it exists — the real benefit
+
+The main purpose of prototypes is to share methods and behavior efficiently between many instances.
+
+If you create 1 million User objects, each shouldn’t have its own copy of methods like login() or logout().
+You put those methods on the prototype so they’re shared, not duplicated.
+
+⸻
+
+💡 Example: Where we actually use it
+
+1. Reusing shared methods efficiently
+
+function User(name) {
+  this.name = name;
+}
+
+// Shared behavior — only one copy exists
+User.prototype.greet = function() {
+  console.log(`Hi, I'm ${this.name}`);
+};
+
+const u1 = new User("Shash");
+const u2 = new User("Aman");
+
+u1.greet(); // "Hi, I'm Shash"
+u2.greet(); // "Hi, I'm Aman"
+
+// Memory-efficient — only one 'greet' function lives in memory
+
+If greet was defined inside the constructor, every new User would get its own copy, wasting memory.
+
+⸻
+
+2. Extending built-in objects
+
+You can extend the functionality of existing JS objects (though you usually avoid modifying built-ins directly in production).
+
+Array.prototype.last = function() {
+  return this[this.length - 1];
+};
+
+console.log([1,2,3].last()); // 3
+
+That’s prototype inheritance — all arrays now “inherit” that new last() method.
+
+⸻
+
+3. Creating hierarchies (class-like inheritance)
+
+Before ES6 classes existed, prototypes were how we simulated “OOP-style” inheritance:
+
+function Animal(name) {
+  this.name = name;
+}
+Animal.prototype.eat = function() {
+  console.log(`${this.name} is eating`);
+};
+
+function Dog(name, breed) {
+  Animal.call(this, name); // inherit properties
+  this.breed = breed;
+}
+
+Object.setPrototypeOf(Dog.prototype, Animal.prototype);
+
+Dog.prototype.bark = function() {
+  console.log(`${this.name} barks`);
+};
+
+const rex = new Dog("Rex", "German Shepherd");
+rex.eat();  // inherited from Animal
+rex.bark(); // defined on Dog
+
+That’s prototypal inheritance in action — Dog delegates to Animal, no method copies involved.
+
+⸻
+
+4. Prototypal pattern (direct object inheritance)
+
+You can also skip “classes” entirely and just use plain objects that inherit from other objects:
+
+const animal = {
+  eat() { console.log(`${this.name} eats.`); }
+};
+
+const dog = Object.create(animal);
+dog.name = "Rex";
+dog.bark = function() { console.log(`${this.name} barks.`); };
+
+dog.eat();  // from prototype
+dog.bark(); // from itself
+
+✅ Simple, elegant, and used in frameworks (like React’s early internal patterns, pre-hooks).
+
+⸻
+
+🔧 Real-World Scenarios You See Prototypes In
+
+Scenario	Description
+Browser APIs	DOM objects (e.g. HTMLElement, Node, EventTarget) use deep prototype chains.
+Custom Libraries/Frameworks	Object-based inheritance in older JS frameworks (AngularJS, Backbone).
+Performance Optimization	Sharing behavior across thousands of similar objects.
+Polyfills / Patches	Adding methods to built-ins via their prototypes (e.g., Array.prototype.includes).
+Class Syntax (under the hood)	ES6 class is syntactic sugar over prototypes — still uses them internally.
+
+
+⸻
+
+🧠 Mental Model
+
+Think of the prototype as a blueprint of shared behavior.
+Instances just have their own data, and they delegate behavior lookup to their prototype.
+
+Instance (data) ----> Prototype (shared methods)
+
+
+⸻
+
+🔥 TL;DR — Why prototypes matter
+
+✅ Efficiency: one copy of shared behavior
+✅ Extensibility: easy to chain and override
+✅ Foundation: everything in JS (including classes) is built on it
+❌ Not for data: use them for behavior, not unique properties
+

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Library</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <h2>Book Library</h2>
+    <dialog>
+      <button id="close_dialog_cta" style="margin-bottom: 1rem;">Close</button>
+      <p>Add Book to lib</p>
+      <form id="book_form">
+        <input
+          type="text"
+          name="title"
+          placeholder="Enter Book Title"
+          required
+        />
+        <input
+          type="text"
+          name="author"
+          placeholder="Enter Book Author"
+          required
+        />
+        <button type="submit">Submit</button>
+      </form>
+    </dialog>
+    <button id="add_book_cta">Show the dialog</button>
+    <div class="books"></div>
+    <script src="./index.js"></script>
+  </body>
+</html>

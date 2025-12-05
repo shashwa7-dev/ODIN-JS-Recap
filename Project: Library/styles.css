@@ -1,0 +1,44 @@
+*,
+&::before,
+&::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 2rem;
+}
+.books {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.book_card {
+  border: 1px solid;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+dialog {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 2rem auto;
+}
+dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+/* Backdrop style if req */
+dialog::backdrop {
+  background: rgb(0, 0, 0, 0.8);
+}
+
+.book_form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
